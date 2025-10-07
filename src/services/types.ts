@@ -5,3 +5,10 @@ export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface RegistrationResponse {
+  user: User;
+  accessToken: string;
+  refreshToken: string;
+  message: string;
+}

@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import type { LoginFormValues } from "../components/LoginForm/schemas/schemas";
+import type { LoginFormValues } from "../components/LoginForm/schemas";
+import type { RegistrationFormValues } from "../components/RegisterForm/schemas";
 import { Api } from "../services/Api";
 import { QUERY_KEY } from "../shared/constants/constants";
 
@@ -22,5 +23,12 @@ export const useAuth = () => {
     },
   });
 
-  return { loginMutation, logoutMutation };
+  const registerMutation = useMutation({
+    mutationFn: (data: RegistrationFormValues) => Api.register(data),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: QUERY_KEY.user });
+    },
+  });
+
+  return { loginMutation, logoutMutation, registerMutation };
 };
