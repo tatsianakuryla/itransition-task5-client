@@ -1,4 +1,4 @@
-import type { User } from "../types/types";
+import type { User, UserStatus } from "../types/types";
 
 export interface LoginResponse {
   user: User;
@@ -14,3 +14,22 @@ export interface RegistrationResponse {
 }
 
 export type GetUsersResponse = User[];
+
+export interface UpdateStatusResponse {
+  message: string;
+  count: number;
+}
+
+export interface DeleteUsersResponse {
+  message: string;
+  count: number;
+}
+
+export interface UpdateStatusParameters {
+  ids: number[];
+  status: UserStatus;
+}
+
+export interface DeleteUserParameters {
+  ids: number[];
+}

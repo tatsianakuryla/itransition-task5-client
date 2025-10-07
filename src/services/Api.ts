@@ -4,7 +4,15 @@ import type { LoginFormValues } from "../components/LoginForm/schemas";
 import type { RegistrationFormValues } from "../components/RegisterForm/schemas";
 import { LocalStorage } from "../localStorage/LocalStorage";
 import { URLS } from "../shared/constants/constants";
-import type { GetUsersResponse, LoginResponse, RegistrationResponse } from "./types";
+import type {
+  DeleteUserParameters,
+  DeleteUsersResponse,
+  GetUsersResponse,
+  LoginResponse,
+  RegistrationResponse,
+  UpdateStatusParameters,
+  UpdateStatusResponse,
+} from "./types";
 
 axios.defaults.withCredentials = true;
 
@@ -41,6 +49,24 @@ export class Api {
 
   public static async getUsers(): Promise<GetUsersResponse> {
     const response = await axios.get<GetUsersResponse>(URLS.USERS);
+    return response.data;
+  }
+
+  public static async updateStatus(data: UpdateStatusParameters): Promise<UpdateStatusResponse> {
+    const response = await axios.patch<UpdateStatusResponse>(URLS.UPDATE_STATUS, {
+      ids: data.ids,
+      status: data.status,
+    });
+    return response.data;
+  }
+
+  public static async deleteUsers(data: DeleteUserParameters): Promise<DeleteUsersResponse> {
+    const response = await axios.delete<DeleteUsersResponse>(URLS.DELETE_USERS, { data: { ids: data.ids } });
+    return response.data;
+  }
+
+  public static async deleteUnverified(): Promise<DeleteUsersResponse> {
+    const response = await axios.delete<DeleteUsersResponse>(URLS.DELETE_UNVERIFIED);
     return response.data;
   }
 

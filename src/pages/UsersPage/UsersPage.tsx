@@ -1,4 +1,4 @@
-import { Database } from "../../components/DataBase/Database";
+import { Database } from "../../components/Database/Database";
 
 export const UsersPage = () => {
   return (

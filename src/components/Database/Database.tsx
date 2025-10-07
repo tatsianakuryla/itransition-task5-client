@@ -1,16 +1,15 @@
 import { useState } from "react";
 
-import { useUsers } from "../../hooks/useUsers";
+import { useDatabase } from "../../hooks/useDatabase";
 import { Spinner } from "../Spinner/Spinner";
 import { Toolbar } from "../Toolbar/Toolbar";
 
 export const Database = () => {
-  const { getUsersQuery } = useUsers();
+  const { getUsersQuery, updateUsersStatusMutation, deleteUsersMutation, deleteUnverifiedMutation } = useDatabase();
   const { data, isError, error, refetch, isFetching, isLoading } = getUsersQuery;
   const message = error instanceof Error ? error.message : "Failed to load users";
   const users = data || [];
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
-
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
       setSelectedIds(users.map((user) => user.id));
@@ -31,19 +30,19 @@ export const Database = () => {
   const isIndeterminate = selectedIds.length > 0 && selectedIds.length < users.length;
 
   const handleBlock = () => {
-    console.log("Block users:", selectedIds);
+    updateUsersStatusMutation.mutate({ ids: selectedIds, status: "BLOCKED" });
   };
 
   const handleUnblock = () => {
-    console.log("Unblock users:", selectedIds);
+    updateUsersStatusMutation.mutate({ ids: selectedIds, status: "ACTIVE" });
   };
 
   const handleDelete = () => {
-    console.log("Delete users:", selectedIds);
+    deleteUsersMutation.mutate({ ids: selectedIds });
   };
 
   const handleDeleteUnverified = () => {
-    console.log("Delete unverified users");
+    deleteUnverifiedMutation.mutate();
   };
 
   if (isLoading) {
