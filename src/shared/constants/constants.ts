@@ -1,10 +1,9 @@
-export const API_BASE_URL = "https://backend--itransition-task5-server--kfjltdjcwqvn.code.run";
+export const API_BASE_URL = "http://localhost:3000";
 
 export const DEFAULT_LOGIN_FORM_VALUES = {
   email: "",
   password: "",
 };
-
 export const DEFAULT_REGISTRATION_FORM_VALUES = { email: "", password: "", name: "" };
 
 export const QUERY_KEY = {

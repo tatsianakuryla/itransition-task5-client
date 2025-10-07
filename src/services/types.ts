@@ -1,4 +1,4 @@
-import type { User, UserStatus } from "../types/types";
+import type { SortColumn, SortDirection,User, UserStatus } from "../types/types";
 
 export interface LoginResponse {
   user: User;
@@ -14,6 +14,11 @@ export interface RegistrationResponse {
 }
 
 export type GetUsersResponse = User[];
+
+export interface GetUsersParameters {
+  sortBy?: SortColumn;
+  order?: SortDirection;
+}
 
 export interface UpdateStatusResponse {
   message: string;

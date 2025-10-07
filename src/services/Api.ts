@@ -7,6 +7,7 @@ import { URLS } from "../shared/constants/constants";
 import type {
   DeleteUserParameters,
   DeleteUsersResponse,
+  GetUsersParameters,
   GetUsersResponse,
   LoginResponse,
   RegistrationResponse,
@@ -33,6 +34,19 @@ axios.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const errorMessage = error.response?.data?.error;
+    if (
+      (error.response?.status === 401 && errorMessage === "User not found") ||
+      (error.response?.status === 403 && errorMessage === "User is blocked")
+    ) {
+      LocalStorage.removeTokensFromLocalStorage();
+      const message =
+        errorMessage === "User not found" ? "Your account has been deleted" : "Your account has been blocked";
+      sessionStorage.setItem("authError", message);
+      window.location.href = "/login";
+      return Promise.reject(error);
+    }
+
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
@@ -80,8 +94,8 @@ export class Api {
     return response.data;
   }
 
-  public static async getUsers(): Promise<GetUsersResponse> {
-    const response = await axios.get<GetUsersResponse>(URLS.USERS);
+  public static async getUsers(params?: GetUsersParameters): Promise<GetUsersResponse> {
+    const response = await axios.get<GetUsersResponse>(URLS.USERS, { params });
     return response.data;
   }
 

@@ -1,16 +1,32 @@
 import { useState } from "react";
 
 import { useDatabase } from "../../hooks/useDatabase";
+import type { SortColumn, SortDirection } from "../../types/types";
 import { LogoutButton } from "../LogoutButton/LogoutButton";
 import { Spinner } from "../Spinner/Spinner";
 import { Toolbar } from "../Toolbar/Toolbar";
 
 export const Database = () => {
-  const { getUsersQuery, updateUsersStatusMutation, deleteUsersMutation, deleteUnverifiedMutation } = useDatabase();
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const [sortColumn, setSortColumn] = useState<SortColumn>("lastLoginTime");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
+
+  const sortParams = { sortBy: sortColumn, order: sortDirection };
+  const { getUsersQuery, updateUsersStatusMutation, deleteUsersMutation, deleteUnverifiedMutation } =
+    useDatabase(sortParams);
   const { data, isError, error, refetch, isFetching, isLoading } = getUsersQuery;
   const message = error instanceof Error ? error.message : "Failed to load users";
   const users = data || [];
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
+  const handleSort = (column: SortColumn) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortColumn(column);
+      setSortDirection("asc");
+    }
+  };
+
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
       setSelectedIds(users.map((user) => user.id));
@@ -76,8 +92,31 @@ export const Database = () => {
         onDelete={handleDelete}
         onDeleteUnverified={handleDeleteUnverified}
       />
-      <div className="table-responsive">
-        <table className="table table-striped table-hover">
+      <div className="table-responsive" style={{ position: "relative" }}>
+        {isFetching && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(255, 255, 255, 0.7)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              zIndex: 10,
+            }}
+          >
+            <div className="spinner-border text-primary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
+        <table
+          className="table table-striped table-hover"
+          style={{ transition: "opacity 0.2s", opacity: isFetching ? 0.5 : 1 }}
+        >
           <thead className="table-dark">
             <tr>
               <th scope="col" style={{ width: "50px" }}>
@@ -93,16 +132,35 @@ export const Database = () => {
                   onChange={(event) => handleSelectAll(event.target.checked)}
                 />
               </th>
-              <th scope="col">Name</th>
-              <th scope="col">Email</th>
-              <th scope="col">Status</th>
-              <th scope="col">Registration Date</th>
+              <th scope="col" style={{ cursor: "pointer", userSelect: "none" }} onClick={() => handleSort("name")}>
+                Name {sortColumn === "name" && (sortDirection === "asc" ? "↑" : "↓")}
+              </th>
+              <th scope="col" style={{ cursor: "pointer", userSelect: "none" }} onClick={() => handleSort("email")}>
+                Email {sortColumn === "email" && (sortDirection === "asc" ? "↑" : "↓")}
+              </th>
+              <th scope="col" style={{ cursor: "pointer", userSelect: "none" }} onClick={() => handleSort("status")}>
+                Status {sortColumn === "status" && (sortDirection === "asc" ? "↑" : "↓")}
+              </th>
+              <th
+                scope="col"
+                style={{ cursor: "pointer", userSelect: "none" }}
+                onClick={() => handleSort("lastLoginTime")}
+              >
+                Last Login {sortColumn === "lastLoginTime" && (sortDirection === "asc" ? "↑" : "↓")}
+              </th>
+              <th
+                scope="col"
+                style={{ cursor: "pointer", userSelect: "none" }}
+                onClick={() => handleSort("registrationTime")}
+              >
+                Registration Date {sortColumn === "registrationTime" && (sortDirection === "asc" ? "↑" : "↓")}
+              </th>
             </tr>
           </thead>
           <tbody>
             {users.length === 0 ? (
               <tr>
-                <td colSpan={5} className="text-center text-muted">
+                <td colSpan={6} className="text-center text-muted">
                   No users found
                 </td>
               </tr>
@@ -128,6 +186,7 @@ export const Database = () => {
                       {user.status}
                     </span>
                   </td>
+                  <td>{user.lastLoginTime ? new Date(user.lastLoginTime).toLocaleString() : "Never"}</td>
                   <td>{new Date(user.registrationTime).toLocaleString()}</td>
                 </tr>
               ))

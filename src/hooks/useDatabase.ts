@@ -1,15 +1,16 @@
-import { useMutation, useQuery,useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { Api } from "../services/Api";
-import type { DeleteUserParameters, UpdateStatusParameters } from "../services/types";
+import type { DeleteUserParameters, GetUsersParameters, UpdateStatusParameters } from "../services/types";
 import { QUERY_KEY } from "../shared/constants/constants";
 
-export const useDatabase = () => {
+export const useDatabase = (sortParams?: GetUsersParameters) => {
   const queryClient = useQueryClient();
 
   const getUsersQuery = useQuery({
-    queryKey: QUERY_KEY.database,
-    queryFn: Api.getUsers,
+    queryKey: [...QUERY_KEY.database, sortParams],
+    queryFn: () => Api.getUsers(sortParams),
+    placeholderData: (previousData) => previousData,
   });
 
   const updateUsersStatusMutation = useMutation({
