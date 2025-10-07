@@ -4,6 +4,7 @@ import { ActivationFailedPage } from "../pages/ActivationFailedPage/ActivationFa
 import { ActivationSuccessPage } from "../pages/ActivationSuccessPage/ActivationSuccessPage";
 import { AuthFormPage } from "../pages/AuthFormPage/AuthFormPage";
 import { NotFoundPage } from "../pages/NotFoundPage/NotFoundPage";
+import { UsersPage } from "../pages/UsersPage/UsersPage";
 import { ROUTES } from "./routs";
 
 export const Router = () => {
@@ -15,6 +16,7 @@ export const Router = () => {
       <Route path={ROUTES.activationSuccess} element={<ActivationSuccessPage />}></Route>
       <Route path={ROUTES.activationFailed} element={<ActivationFailedPage />}></Route>
       <Route path={ROUTES.notFound} element={<NotFoundPage />}></Route>
+      <Route path={ROUTES.database} element={<UsersPage />}></Route>
     </Routes>
   );
 };

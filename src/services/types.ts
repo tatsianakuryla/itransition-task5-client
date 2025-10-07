@@ -12,3 +12,5 @@ export interface RegistrationResponse {
   refreshToken: string;
   message: string;
 }
+
+export type GetUsersResponse = User[];

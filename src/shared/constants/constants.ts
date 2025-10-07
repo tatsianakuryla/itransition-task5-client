@@ -9,6 +9,7 @@ export const DEFAULT_REGISTRATION_FORM_VALUES = { email: "", password: "", name:
 
 export const QUERY_KEY = {
   user: ["user"] as const,
+  database: ["database"] as const,
 };
 
 export const URLS = {
