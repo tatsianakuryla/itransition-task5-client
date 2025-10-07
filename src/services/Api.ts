@@ -29,22 +29,54 @@ axios.interceptors.request.use(
   },
 );
 
+axios.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url?.includes("/refresh") &&
+      !originalRequest.url?.includes("/login") &&
+      !originalRequest.url?.includes("/register")
+    ) {
+      originalRequest._retry = true;
+      try {
+        const refreshToken = LocalStorage.getToken("refreshToken");
+        if (!refreshToken) {
+          throw new Error("No refresh token");
+        }
+        const response = await axios.post(URLS.REFRESH, { refreshToken });
+        const { accessToken, refreshToken: newRefreshToken } = response.data;
+        LocalStorage.setTokensToLocalStorage(accessToken, newRefreshToken);
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        return axios(originalRequest);
+      } catch (refreshError) {
+        LocalStorage.removeTokensFromLocalStorage();
+        window.location.href = "/login";
+        return Promise.reject(refreshError);
+      }
+    }
+    return Promise.reject(error);
+  },
+);
+
 export class Api {
   public static async login(data: LoginFormValues): Promise<LoginResponse> {
     const response = await axios.post<LoginResponse>(URLS.LOGIN, data);
-    this.setTokensToLocalStorage(response.data.accessToken, response.data.refreshToken);
+    LocalStorage.setTokensToLocalStorage(response.data.accessToken, response.data.refreshToken);
     return response.data;
   }
 
   public static async logout(): Promise<void> {
     const refreshToken = LocalStorage.getToken("refreshToken");
     await axios.post(URLS.LOGOUT, { refreshToken });
-    this.removeTokensFromLocalStorage();
+    LocalStorage.removeTokensFromLocalStorage();
   }
 
   public static async register(data: RegistrationFormValues): Promise<RegistrationResponse> {
     const response = await axios.post<RegistrationResponse>(URLS.REGISTER, data);
-    this.setTokensToLocalStorage(response.data.accessToken, response.data.refreshToken);
+    LocalStorage.setTokensToLocalStorage(response.data.accessToken, response.data.refreshToken);
     return response.data;
   }
 
@@ -69,15 +101,5 @@ export class Api {
   public static async deleteUnverified(): Promise<DeleteUsersResponse> {
     const response = await axios.delete<DeleteUsersResponse>(URLS.DELETE_UNVERIFIED);
     return response.data;
-  }
-
-  private static setTokensToLocalStorage(accessToken: string, refreshToken: string): void {
-    LocalStorage.setToken("accessToken", accessToken);
-    LocalStorage.setToken("refreshToken", refreshToken);
-  }
-
-  private static removeTokensFromLocalStorage(): void {
-    LocalStorage.removeToken("accessToken");
-    LocalStorage.removeToken("refreshToken");
   }
 }

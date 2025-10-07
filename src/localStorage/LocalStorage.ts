@@ -12,4 +12,14 @@ export class LocalStorage {
   public static removeToken(tokenType: Tokens) {
     localStorage.removeItem(tokenType);
   }
+
+  public static setTokensToLocalStorage(accessToken: string, refreshToken: string): void {
+    LocalStorage.setToken("accessToken", accessToken);
+    LocalStorage.setToken("refreshToken", refreshToken);
+  }
+
+  public static removeTokensFromLocalStorage(): void {
+    LocalStorage.removeToken("accessToken");
+    LocalStorage.removeToken("refreshToken");
+  }
 }
