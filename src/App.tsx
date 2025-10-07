@@ -1,7 +1,7 @@
-import { RegisterForm } from "./components/RegisterForm/RegisterForm";
+import { Router } from "./router/Router";
 
 function App() {
-  return <RegisterForm />;
+  return <Router />;
 }
 
 export default App;
