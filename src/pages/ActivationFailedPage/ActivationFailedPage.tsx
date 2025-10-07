@@ -1,5 +1,6 @@
 import { Link, useSearchParams } from "react-router-dom";
 
+import { ErrorIcon } from "../../assets/icons/ErrorIcon";
 import { ROUTES } from "../../router/routs";
 
 export const ActivationFailedPage = () => {
@@ -14,21 +15,7 @@ export const ActivationFailedPage = () => {
             className="rounded-circle bg-danger bg-opacity-10 d-flex align-items-center justify-content-center mx-auto mb-4"
             style={{ width: "80px", height: "80px" }}
           >
-            <svg
-              width="48"
-              height="48"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="text-danger"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <line x1="15" y1="9" x2="9" y2="15" />
-              <line x1="9" y1="9" x2="15" y2="15" />
-            </svg>
+            <ErrorIcon />
           </div>
           <h1 className="h2 fw-bold mb-3">Activation Failed</h1>
           <p className="text-muted mb-4">
