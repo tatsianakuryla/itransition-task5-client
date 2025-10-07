@@ -1,7 +1,8 @@
 import { useState } from "react";
 
 import { useUsers } from "../../hooks/useUsers";
-import { Spinner } from "../Spinner";
+import { Spinner } from "../Spinner/Spinner";
+import { Toolbar } from "../Toolbar/Toolbar";
 
 export const Database = () => {
   const { getUsersQuery } = useUsers();
@@ -29,6 +30,22 @@ export const Database = () => {
   const isAllSelected = users.length > 0 && selectedIds.length === users.length;
   const isIndeterminate = selectedIds.length > 0 && selectedIds.length < users.length;
 
+  const handleBlock = () => {
+    console.log("Block users:", selectedIds);
+  };
+
+  const handleUnblock = () => {
+    console.log("Unblock users:", selectedIds);
+  };
+
+  const handleDelete = () => {
+    console.log("Delete users:", selectedIds);
+  };
+
+  const handleDeleteUnverified = () => {
+    console.log("Delete unverified users");
+  };
+
   if (isLoading) {
     return <Spinner />;
   }
@@ -49,6 +66,13 @@ export const Database = () => {
 
   return (
     <div className="container-fluid">
+      <Toolbar
+        selectedCount={selectedIds.length}
+        onBlock={handleBlock}
+        onUnblock={handleUnblock}
+        onDelete={handleDelete}
+        onDeleteUnverified={handleDeleteUnverified}
+      />
       <div className="table-responsive">
         <table className="table table-striped table-hover">
           <thead className="table-dark">
