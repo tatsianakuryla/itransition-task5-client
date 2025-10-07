@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 import { SuccessIcon } from "../../assets/icons/SuccessIcon";
-import { ROUTES } from "../../router/routs";
+import { ROUTES } from "../../router/routes";
 
 export const ActivationSuccessPage = () => {
   return (

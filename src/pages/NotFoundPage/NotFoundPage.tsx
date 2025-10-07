@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 import { WarningIcon } from "../../assets/icons/WarningIcon";
-import { ROUTES } from "../../router/routs";
+import { ROUTES } from "../../router/routes";
 
 export const NotFoundPage = () => {
   return (

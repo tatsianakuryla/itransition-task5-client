@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import type { LoginFormValues } from "../components/LoginForm/schemas";
 import type { RegistrationFormValues } from "../components/RegisterForm/schemas";
-import { ROUTES } from "../router/routs";
+import { ROUTES } from "../router/routes";
 import { Api } from "../services/Api";
 import type { LoginResponse, RegistrationResponse } from "../services/types";
 import { QUERY_KEY } from "../shared/constants/constants";

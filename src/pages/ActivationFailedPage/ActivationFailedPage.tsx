@@ -1,7 +1,7 @@
 import { Link, useSearchParams } from "react-router-dom";
 
 import { ErrorIcon } from "../../assets/icons/ErrorIcon";
-import { ROUTES } from "../../router/routs";
+import { ROUTES } from "../../router/routes";
 
 export const ActivationFailedPage = () => {
   const [searchParams] = useSearchParams();
