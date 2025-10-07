@@ -4,4 +4,6 @@ export const ROUTES = {
   register: "/register",
   notFound: "*",
   dashboard: "/users",
+  activationSuccess: "/activation-success",
+  activationFailed: "/activation-failed",
 } as const;

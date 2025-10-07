@@ -1,10 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
 
+import { LoginForm } from "../../components/LoginForm/LoginForm";
+import { RegisterForm } from "../../components/RegisterForm/RegisterForm";
 import { ROUTES } from "../../router/routs";
-import { LoginForm } from "../LoginForm/LoginForm";
-import { RegisterForm } from "../RegisterForm/RegisterForm";
 
-export const AuthForm = () => {
+export const AuthFormPage = () => {
   const location = useLocation();
   const isRegister = location.pathname === ROUTES.register;
 

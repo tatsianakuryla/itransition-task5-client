@@ -1,16 +1,20 @@
-import { Route,Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
-import { AuthForm } from "../components/AuthForm/AuthForm";
-import { NotFound } from "../components/NotFound/NotFound";
+import { ActivationFailedPage } from "../pages/ActivationFailedPage/ActivationFailedPage";
+import { ActivationSuccessPage } from "../pages/ActivationSuccessPage/ActivationSuccessPage";
+import { AuthFormPage } from "../pages/AuthFormPage/AuthFormPage";
+import { NotFoundPage } from "../pages/NotFoundPage/NotFoundPage";
 import { ROUTES } from "./routs";
 
 export const Router = () => {
   return (
     <Routes>
-      <Route path={ROUTES.home} element={<AuthForm />}></Route>
-      <Route path={ROUTES.login} element={<AuthForm />}></Route>
-      <Route path={ROUTES.register} element={<AuthForm />}></Route>
-      <Route path={ROUTES.notFound} element={<NotFound />}></Route>
+      <Route path={ROUTES.home} element={<AuthFormPage />}></Route>
+      <Route path={ROUTES.login} element={<AuthFormPage />}></Route>
+      <Route path={ROUTES.register} element={<AuthFormPage />}></Route>
+      <Route path={ROUTES.activationSuccess} element={<ActivationSuccessPage />}></Route>
+      <Route path={ROUTES.activationFailed} element={<ActivationFailedPage />}></Route>
+      <Route path={ROUTES.notFound} element={<NotFoundPage />}></Route>
     </Routes>
   );
 };
