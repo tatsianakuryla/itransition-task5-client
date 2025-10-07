@@ -3,10 +3,8 @@ import { useForm } from "react-hook-form";
 
 import { useAuth } from "../../hooks/useAuth";
 import { DEFAULT_LOGIN_FORM_VALUES } from "../../shared/constants/constants";
-import { getErrorMessage } from "../../utils/errorUtils";
-import { Button } from "../Button/Button";
+import { getErrorMessage } from "../../shared/utils/errorUtils";
 import { FormField } from "../FormField/FormField";
-import { Loader } from "../Loader/Loader";
 import { type LoginFormValues, LoginFormValuesSchema } from "./schemas";
 
 export const LoginForm = () => {
@@ -25,7 +23,6 @@ export const LoginForm = () => {
 
   return (
     <form
-      className="login-form"
       onSubmit={handleSubmit((data) => {
         if (loginMutation.isPending) return;
         loginMutation.mutate(data, {
@@ -41,24 +38,41 @@ export const LoginForm = () => {
         });
       })}
     >
-      <fieldset disabled={loginMutation.isPending}>
-        <FormField label="Email">
-          <input {...register("email")} placeholder="Type your email" />
-          <p className="auth-form__error" role="alert">
-            {errors.email?.message}
-          </p>
+      <fieldset disabled={loginMutation.isPending} className="border-0 p-0 m-0">
+        <FormField label="Email" htmlFor="email" errorMessage={errors.email?.message}>
+          <input
+            id="email"
+            type="email"
+            className={`form-control ${errors.email ? "is-invalid" : ""}`}
+            placeholder="Type your email"
+            {...register("email")}
+          />
         </FormField>
-        <FormField label="Password">
-          <input type="password" {...register("password")} placeholder="Type your password" />
-          <p className="auth-form__error" role="alert">
-            {errors.password?.message}
-          </p>
+        <FormField label="Password" htmlFor="password" errorMessage={errors.password?.message}>
+          <input
+            id="password"
+            type="password"
+            className={`form-control ${errors.password ? "is-invalid" : ""}`}
+            placeholder="Type your password"
+            {...register("password")}
+          />
         </FormField>
       </fieldset>
-      <Button type="submit" isDisabled={loginMutation.isPending}>
-        {loginMutation.isPending ? <Loader /> : "Login"}
-      </Button>
-      {loginMutation.error && <p className="auth-form__error">{getErrorMessage(loginMutation.error)}</p>}
+      <button type="submit" className="btn btn-primary w-100 py-2 fw-semibold" disabled={loginMutation.isPending}>
+        {loginMutation.isPending ? (
+          <>
+            <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Loading...
+          </>
+        ) : (
+          "Login"
+        )}
+      </button>
+      {loginMutation.error && (
+        <div className="alert alert-danger mt-3 mb-0" role="alert">
+          {getErrorMessage(loginMutation.error)}
+        </div>
+      )}
     </form>
   );
 };

@@ -3,7 +3,7 @@ export const ROUTES = {
   login: "/login",
   register: "/register",
   notFound: "*",
-  dashboard: "/users",
+  database: "/users",
   activationSuccess: "/activation-success",
   activationFailed: "/activation-failed",
 } as const;

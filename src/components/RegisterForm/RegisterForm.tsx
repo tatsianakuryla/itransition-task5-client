@@ -3,10 +3,8 @@ import { useForm } from "react-hook-form";
 
 import { useAuth } from "../../hooks/useAuth";
 import { DEFAULT_REGISTRATION_FORM_VALUES } from "../../shared/constants/constants";
-import { getErrorMessage } from "../../utils/errorUtils";
-import { Button } from "../Button/Button";
+import { getErrorMessage } from "../../shared/utils/errorUtils";
 import { FormField } from "../FormField/FormField";
-import { Loader } from "../Loader/Loader";
 import { type RegistrationFormValues, RegistrationFormValuesSchema } from "./schemas";
 
 export const RegisterForm = () => {
@@ -24,7 +22,6 @@ export const RegisterForm = () => {
 
   return (
     <form
-      className="register-form"
       onSubmit={handleSubmit((data) => {
         if (registerMutation.isPending) return;
         registerMutation.mutate(data, {
@@ -40,24 +37,50 @@ export const RegisterForm = () => {
         });
       })}
     >
-      <fieldset disabled={registerMutation.isPending}>
-        <FormField label="Name">
-          <input {...register("name")} placeholder="Name" />
-          <p className="auth-form__error">{errors.name?.message}</p>
+      <fieldset disabled={registerMutation.isPending} className="border-0 p-0 m-0">
+        <FormField label="Name" htmlFor="name" errorMessage={errors.name?.message}>
+          <input
+            id="name"
+            type="text"
+            className={`form-control ${errors.name ? "is-invalid" : ""}`}
+            placeholder="Name"
+            {...register("name")}
+          />
         </FormField>
-        <FormField label="Email">
-          <input {...register("email")} placeholder="Email" />
-          <p className="auth-form__error">{errors.email?.message}</p>
+        <FormField label="Email" htmlFor="email" errorMessage={errors.email?.message}>
+          <input
+            id="email"
+            type="email"
+            className={`form-control ${errors.email ? "is-invalid" : ""}`}
+            placeholder="Email"
+            {...register("email")}
+          />
         </FormField>
-        <FormField label="Password">
-          <input type="password" placeholder="Password" {...register("password")} />
-          <p className="auth-form__error">{errors.password?.message}</p>
+        <FormField label="Password" htmlFor="password" errorMessage={errors.password?.message}>
+          <input
+            id="password"
+            type="password"
+            className={`form-control ${errors.password ? "is-invalid" : ""}`}
+            placeholder="Password"
+            {...register("password")}
+          />
         </FormField>
       </fieldset>
-      <Button type="submit" isDisabled={registerMutation.isPending}>
-        {registerMutation.isPending ? <Loader /> : "Sign up"}
-      </Button>
-      {registerMutation.error && <p className="auth-form__error">{getErrorMessage(registerMutation.error)}</p>}
+      <button type="submit" className="btn btn-primary w-100 py-2 fw-semibold" disabled={registerMutation.isPending}>
+        {registerMutation.isPending ? (
+          <>
+            <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            Loading...
+          </>
+        ) : (
+          "Sign up"
+        )}
+      </button>
+      {registerMutation.error && (
+        <div className="alert alert-danger mt-3 mb-0" role="alert">
+          {getErrorMessage(registerMutation.error)}
+        </div>
+      )}
     </form>
   );
 };

@@ -16,3 +16,17 @@ body {
 #root {
   min-height: 100vh;
 }
+
+.form-control:focus,
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus {
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.form-control:hover,
+.btn:hover {
+  box-shadow: none !important;
+  transform: none !important;
+}

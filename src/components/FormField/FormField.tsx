@@ -4,14 +4,19 @@ interface IFormFieldProps {
   label: string;
   children: ReactNode;
   errorMessage?: string;
+  htmlFor?: string;
 }
 
-export const FormField: FC<IFormFieldProps> = ({ children, label, errorMessage }) => {
+export const FormField: FC<IFormFieldProps> = ({ children, label, errorMessage, htmlFor }) => {
   return (
-    <label className="form-field">
-      <span className="form-field__label">{label}</span>
+    <div className="mb-3">
+      <label htmlFor={htmlFor} className="form-label fw-semibold">
+        {label}
+      </label>
       {children}
-      {errorMessage && <span className="form-field__error-text">{errorMessage}</span>}
-    </label>
+      <div className="invalid-feedback d-block" role="alert" style={{ minHeight: "1.2rem" }}>
+        {errorMessage ?? ""}
+      </div>
+    </div>
   );
 };
