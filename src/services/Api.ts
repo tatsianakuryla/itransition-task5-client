@@ -37,7 +37,8 @@ export class Api {
   }
 
   public static async logout(): Promise<void> {
-    await axios.post(URLS.LOGOUT);
+    const refreshToken = LocalStorage.getToken("refreshToken");
+    await axios.post(URLS.LOGOUT, { refreshToken });
     this.removeTokensFromLocalStorage();
   }
 

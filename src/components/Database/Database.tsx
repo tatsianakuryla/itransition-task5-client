@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { useDatabase } from "../../hooks/useDatabase";
+import { LogoutButton } from "../LogoutButton/LogoutButton";
 import { Spinner } from "../Spinner/Spinner";
 import { Toolbar } from "../Toolbar/Toolbar";
 
@@ -65,6 +66,9 @@ export const Database = () => {
 
   return (
     <div className="container-fluid">
+      <div className="d-flex justify-content-between align-items-center mb-3">
+        <LogoutButton />
+      </div>
       <Toolbar
         selectedCount={selectedIds.length}
         onBlock={handleBlock}
