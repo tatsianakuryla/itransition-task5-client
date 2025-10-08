@@ -122,7 +122,7 @@ export const Database = () => {
         onDelete={handleDelete}
         onDeleteUnverified={handleDeleteUnverified}
       />
-      <div className="table-responsive" style={{ position: "relative" }}>
+      <div className="table-responsive-md" style={{ position: "relative" }}>
         {isFetching && (
           <div
             style={{
@@ -144,12 +144,12 @@ export const Database = () => {
           </div>
         )}
         <table
-          className="table table-striped table-hover"
-          style={{ transition: "opacity 0.2s", opacity: isFetching ? 0.5 : 1 }}
+          className="table table-striped table-hover table-sm table-bordered"
+          style={{ transition: "opacity 0.2s", opacity: isFetching ? 0.5 : 1, minWidth: "100%" }}
         >
           <thead className="table-dark">
             <tr>
-              <th scope="col" style={{ width: "50px" }}>
+              <th scope="col" className="text-center" style={{ width: "50px", minWidth: "50px" }}>
                 <input
                   type="checkbox"
                   className="form-check-input"
@@ -162,25 +162,42 @@ export const Database = () => {
                   onChange={(event) => handleSelectAll(event.target.checked)}
                 />
               </th>
-              <th scope="col" style={{ cursor: "pointer", userSelect: "none" }} onClick={() => handleSort("name")}>
+              <th
+                scope="col"
+                className="text-nowrap"
+                style={{ cursor: "pointer", userSelect: "none", minWidth: "120px" }}
+                onClick={() => handleSort("name")}
+              >
                 Name {sortColumn === "name" && (sortDirection === "asc" ? "↑" : "↓")}
               </th>
-              <th scope="col" style={{ cursor: "pointer", userSelect: "none" }} onClick={() => handleSort("email")}>
+              <th
+                scope="col"
+                className="text-nowrap"
+                style={{ cursor: "pointer", userSelect: "none", minWidth: "180px" }}
+                onClick={() => handleSort("email")}
+              >
                 Email {sortColumn === "email" && (sortDirection === "asc" ? "↑" : "↓")}
               </th>
-              <th scope="col" style={{ cursor: "pointer", userSelect: "none" }} onClick={() => handleSort("status")}>
+              <th
+                scope="col"
+                className="text-nowrap text-center"
+                style={{ cursor: "pointer", userSelect: "none", minWidth: "100px" }}
+                onClick={() => handleSort("status")}
+              >
                 Status {sortColumn === "status" && (sortDirection === "asc" ? "↑" : "↓")}
               </th>
               <th
                 scope="col"
-                style={{ cursor: "pointer", userSelect: "none" }}
+                className="text-nowrap"
+                style={{ cursor: "pointer", userSelect: "none", minWidth: "150px" }}
                 onClick={() => handleSort("lastLoginTime")}
               >
                 Last Login {sortColumn === "lastLoginTime" && (sortDirection === "asc" ? "↑" : "↓")}
               </th>
               <th
                 scope="col"
-                style={{ cursor: "pointer", userSelect: "none" }}
+                className="text-nowrap"
+                style={{ cursor: "pointer", userSelect: "none", minWidth: "150px" }}
                 onClick={() => handleSort("registrationTime")}
               >
                 Registration Date {sortColumn === "registrationTime" && (sortDirection === "asc" ? "↑" : "↓")}
@@ -190,14 +207,14 @@ export const Database = () => {
           <tbody>
             {users.length === 0 ? (
               <tr>
-                <td colSpan={6} className="text-center text-muted">
+                <td colSpan={6} className="text-center text-muted py-4">
                   No users found
                 </td>
               </tr>
             ) : (
               users.map((user) => (
                 <tr key={user.id}>
-                  <td>
+                  <td className="text-center">
                     <input
                       type="checkbox"
                       className="form-check-input"
@@ -205,9 +222,13 @@ export const Database = () => {
                       onChange={(event) => handleSelectOne(user.id, event.target.checked)}
                     />
                   </td>
-                  <td>{user.name}</td>
-                  <td>{user.email}</td>
-                  <td>
+                  <td className="text-truncate" style={{ maxWidth: "200px" }} title={user.name}>
+                    {user.name}
+                  </td>
+                  <td className="text-truncate" style={{ maxWidth: "250px" }} title={user.email}>
+                    {user.email}
+                  </td>
+                  <td className="text-center">
                     <span
                       className={`badge ${
                         user.status === "ACTIVE" ? "bg-success" : user.status === "BLOCKED" ? "bg-danger" : "bg-warning"
@@ -216,8 +237,10 @@ export const Database = () => {
                       {user.status}
                     </span>
                   </td>
-                  <td>{user.lastLoginTime ? new Date(user.lastLoginTime).toLocaleString() : "Never"}</td>
-                  <td>{new Date(user.registrationTime).toLocaleString()}</td>
+                  <td className="text-nowrap">
+                    {user.lastLoginTime ? new Date(user.lastLoginTime).toLocaleString() : "Never"}
+                  </td>
+                  <td className="text-nowrap">{new Date(user.registrationTime).toLocaleString()}</td>
                 </tr>
               ))
             )}
