@@ -6,6 +6,8 @@ import type { SortColumn, SortDirection } from "../../types/types";
 import { LogoutButton } from "../LogoutButton/LogoutButton";
 import { Spinner } from "../Spinner/Spinner";
 import { Toolbar } from "../Toolbar/Toolbar";
+import { ErrorAlert } from "./ErrorAlert";
+import { UsersTable } from "./UsersTable";
 
 export const Database = () => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -28,17 +30,6 @@ export const Database = () => {
     }
   };
 
-  const getSortIcon = (column: SortColumn) => {
-    if (sortColumn === column) {
-      return sortDirection === "asc" ? (
-        <i className="bi bi-arrow-up ms-1"></i>
-      ) : (
-        <i className="bi bi-arrow-down ms-1"></i>
-      );
-    }
-    return <i className="bi bi-arrow-down-up ms-1 text-muted opacity-50"></i>;
-  };
-
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
       setSelectedIds(users.map((user) => user.id));
@@ -54,9 +45,6 @@ export const Database = () => {
       setSelectedIds(selectedIds.filter((selectedId) => selectedId !== id));
     }
   };
-
-  const isAllSelected = users.length > 0 && selectedIds.length === users.length;
-  const isIndeterminate = selectedIds.length > 0 && selectedIds.length < users.length;
 
   const handleBlock = () => {
     updateUsersStatusMutation.mutate(
@@ -108,17 +96,7 @@ export const Database = () => {
   }
 
   if (isError) {
-    return (
-      <div className="alert alert-danger d-flex align-items-center justify-content-between" role="alert">
-        <div>
-          <i className="bi bi-exclamation-triangle-fill me-2"></i>
-          {message}
-        </div>
-        <button className="btn btn-danger btn-sm" onClick={() => refetch()} disabled={isFetching}>
-          {isFetching ? "Retrying..." : "Try again"}
-        </button>
-      </div>
-    );
+    return <ErrorAlert message={message} isFetching={isFetching} onRetry={() => refetch()} />;
   }
 
   return (
@@ -133,131 +111,16 @@ export const Database = () => {
         onDelete={handleDelete}
         onDeleteUnverified={handleDeleteUnverified}
       />
-      <div className="table-responsive-md" style={{ position: "relative" }}>
-        {isFetching && (
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              backgroundColor: "rgba(255, 255, 255, 0.7)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 10,
-            }}
-          >
-            <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-          </div>
-        )}
-        <table
-          className="table table-striped table-hover table-sm table-bordered"
-          style={{ transition: "opacity 0.2s", opacity: isFetching ? 0.5 : 1, minWidth: "100%" }}
-        >
-          <thead className="table-light">
-            <tr>
-              <th scope="col" className="text-center" style={{ width: "50px", minWidth: "50px" }}>
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  checked={isAllSelected}
-                  ref={(input) => {
-                    if (input) {
-                      input.indeterminate = isIndeterminate;
-                    }
-                  }}
-                  onChange={(event) => handleSelectAll(event.target.checked)}
-                />
-              </th>
-              <th
-                scope="col"
-                className="text-nowrap"
-                style={{ cursor: "pointer", userSelect: "none", minWidth: "120px" }}
-                onClick={() => handleSort("name")}
-              >
-                Name {getSortIcon("name")}
-              </th>
-              <th
-                scope="col"
-                className="text-nowrap"
-                style={{ cursor: "pointer", userSelect: "none", minWidth: "180px" }}
-                onClick={() => handleSort("email")}
-              >
-                Email {getSortIcon("email")}
-              </th>
-              <th
-                scope="col"
-                className="text-nowrap text-center"
-                style={{ cursor: "pointer", userSelect: "none", minWidth: "100px" }}
-                onClick={() => handleSort("status")}
-              >
-                Status {getSortIcon("status")}
-              </th>
-              <th
-                scope="col"
-                className="text-nowrap"
-                style={{ cursor: "pointer", userSelect: "none", minWidth: "150px" }}
-                onClick={() => handleSort("lastLoginTime")}
-              >
-                Last Login {getSortIcon("lastLoginTime")}
-              </th>
-              <th
-                scope="col"
-                className="text-nowrap"
-                style={{ cursor: "pointer", userSelect: "none", minWidth: "150px" }}
-                onClick={() => handleSort("registrationTime")}
-              >
-                Registration Date {getSortIcon("registrationTime")}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="text-center text-muted py-4">
-                  No users found
-                </td>
-              </tr>
-            ) : (
-              users.map((user) => (
-                <tr key={user.id}>
-                  <td className="text-center">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      checked={selectedIds.includes(user.id)}
-                      onChange={(event) => handleSelectOne(user.id, event.target.checked)}
-                    />
-                  </td>
-                  <td className="text-truncate" style={{ maxWidth: "200px" }} title={user.name}>
-                    {user.name}
-                  </td>
-                  <td className="text-truncate" style={{ maxWidth: "250px" }} title={user.email}>
-                    {user.email}
-                  </td>
-                  <td className="text-center">
-                    <span
-                      className={`badge ${
-                        user.status === "ACTIVE" ? "bg-success" : user.status === "BLOCKED" ? "bg-danger" : "bg-warning"
-                      }`}
-                    >
-                      {user.status}
-                    </span>
-                  </td>
-                  <td className="text-nowrap">
-                    {user.lastLoginTime ? new Date(user.lastLoginTime).toLocaleString() : "Never"}
-                  </td>
-                  <td className="text-nowrap">{new Date(user.registrationTime).toLocaleString()}</td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <UsersTable
+        users={users}
+        selectedIds={selectedIds}
+        sortColumn={sortColumn}
+        sortDirection={sortDirection}
+        isFetching={isFetching}
+        onSelectAll={handleSelectAll}
+        onSelectOne={handleSelectOne}
+        onSort={handleSort}
+      />
     </div>
   );
 };

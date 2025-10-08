@@ -9,31 +9,26 @@ interface ToolbarProps {
 export const Toolbar = ({ selectedCount, onBlock, onUnblock, onDelete, onDeleteUnverified }: ToolbarProps) => {
   return (
     <div className="d-flex gap-2 align-items-center mb-3">
-      <button
-        className="btn btn-warning d-flex align-items-center justify-content-center"
-        onClick={onBlock}
-        disabled={selectedCount === 0}
-      >
+      <button className="btn btn-warning" onClick={onBlock} disabled={selectedCount === 0} title="Block selected users">
         Block
       </button>
       <button
-        className="btn btn-success d-flex align-items-center justify-content-center"
+        className="btn btn-success"
         onClick={onUnblock}
         disabled={selectedCount === 0}
+        title="Unblock selected users"
       >
         <i className="bi bi-unlock-fill"></i>
       </button>
       <button
-        className="btn btn-danger d-flex align-items-center justify-content-center"
+        className="btn btn-danger"
         onClick={onDelete}
         disabled={selectedCount === 0}
+        title="Delete selected users"
       >
         <i className="bi bi-trash-fill"></i>
       </button>
-      <button
-        className="btn btn-secondary d-flex align-items-center justify-content-center"
-        onClick={onDeleteUnverified}
-      >
+      <button className="btn btn-secondary" onClick={onDeleteUnverified} title="Delete all unverified users">
         <i className="bi bi-eraser"></i>
       </button>
     </div>
