@@ -1,0 +1,40 @@
+{
+  "apiVersion": "v1",
+  "spec": {
+    "kind": "Workflow",
+    "spec": {
+      "type": "service",
+      "name": "task5-frontend",
+      "billing": {
+        "deploymentPlan": "nf-compute-20"
+      },
+      "deployment": {
+        "instances": 1,
+        "buildpack": {
+          "builder": "heroku/buildpacks:20"
+        }
+      },
+      "ports": [
+        {
+          "name": "web",
+          "internalPort": 3000,
+          "protocol": "HTTP",
+          "public": true
+        }
+      ],
+      "buildSettings": {
+        "buildpack": {
+          "preBuildCommand": "npm ci",
+          "buildCommand": "npm run build"
+        }
+      },
+      "runtimeEnvironment": {
+        "NODE_ENV": "production"
+      },
+      "healthcheck": {
+        "path": "/",
+        "initialDelaySeconds": 30
+      }
+    }
+  }
+}
