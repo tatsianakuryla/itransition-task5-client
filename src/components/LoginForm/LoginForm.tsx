@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 import { useAuth } from "../../hooks/useAuth";
 import { DEFAULT_LOGIN_FORM_VALUES } from "../../shared/constants/constants";
@@ -27,6 +28,7 @@ export const LoginForm = () => {
         if (loginMutation.isPending) return;
         loginMutation.mutate(data, {
           onSuccess: () => {
+            toast.success("Login successful!");
             reset(DEFAULT_LOGIN_FORM_VALUES, {
               keepErrors: false,
               keepDirty: false,

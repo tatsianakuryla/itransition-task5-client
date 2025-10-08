@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 import { useAuth } from "../../hooks/useAuth";
 import { DEFAULT_REGISTRATION_FORM_VALUES } from "../../shared/constants/constants";
@@ -26,6 +27,7 @@ export const RegisterForm = () => {
         if (registerMutation.isPending) return;
         registerMutation.mutate(data, {
           onSuccess: () => {
+            toast.success("Registration successful! Please check your email to activate your account.");
             reset(DEFAULT_REGISTRATION_FORM_VALUES, {
               keepErrors: false,
               keepDirty: false,

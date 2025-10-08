@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 import { useDatabase } from "../../hooks/useDatabase";
 import type { SortColumn, SortDirection } from "../../types/types";
@@ -47,19 +48,48 @@ export const Database = () => {
   const isIndeterminate = selectedIds.length > 0 && selectedIds.length < users.length;
 
   const handleBlock = () => {
-    updateUsersStatusMutation.mutate({ ids: selectedIds, status: "BLOCKED" });
+    updateUsersStatusMutation.mutate(
+      { ids: selectedIds, status: "BLOCKED" },
+      {
+        onSuccess: (data) => {
+          toast.success(`Successfully blocked ${data.count} user(s)`);
+          setSelectedIds([]);
+        },
+      },
+    );
   };
 
   const handleUnblock = () => {
-    updateUsersStatusMutation.mutate({ ids: selectedIds, status: "ACTIVE" });
+    updateUsersStatusMutation.mutate(
+      { ids: selectedIds, status: "ACTIVE" },
+      {
+        onSuccess: (data) => {
+          toast.success(`Successfully unblocked ${data.count} user(s)`);
+          setSelectedIds([]);
+        },
+      },
+    );
   };
 
   const handleDelete = () => {
-    deleteUsersMutation.mutate({ ids: selectedIds });
+    deleteUsersMutation.mutate(
+      { ids: selectedIds },
+      {
+        onSuccess: (data) => {
+          toast.success(`Successfully deleted ${data.count} user(s)`);
+          setSelectedIds([]);
+        },
+      },
+    );
   };
 
   const handleDeleteUnverified = () => {
-    deleteUnverifiedMutation.mutate();
+    deleteUnverifiedMutation.mutate(undefined, {
+      onSuccess: (data) => {
+        toast.success(`Successfully deleted ${data.count} unverified user(s)`);
+        setSelectedIds([]);
+      },
+    });
   };
 
   if (isLoading) {
