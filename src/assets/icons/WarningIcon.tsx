@@ -1,11 +1,11 @@
-import React from "react";
+import { type FC } from "react";
 
 interface WarningIconProps {
   className?: string;
   size?: number;
 }
 
-export const WarningIcon: React.FC<WarningIconProps> = ({ className = "text-warning", size = 48 }) => (
+export const WarningIcon: FC<WarningIconProps> = ({ className = "text-warning", size = 48 }) => (
   <svg
     width={size}
     height={size}

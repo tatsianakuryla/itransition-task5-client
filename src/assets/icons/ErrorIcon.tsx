@@ -1,11 +1,11 @@
-import React from "react";
+import { type FC } from "react";
 
 interface ErrorIconProps {
   className?: string;
   size?: number;
 }
 
-export const ErrorIcon: React.FC<ErrorIconProps> = ({ className = "text-danger", size = 48 }) => (
+export const ErrorIcon: FC<ErrorIconProps> = ({ className = "text-danger", size = 48 }) => (
   <svg
     width={size}
     height={size}

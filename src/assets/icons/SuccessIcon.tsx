@@ -1,11 +1,11 @@
-import React from "react";
+import { type FC } from "react";
 
 interface SuccessIconProps {
   className?: string;
   size?: number;
 }
 
-export const SuccessIcon: React.FC<SuccessIconProps> = ({ className = "text-success", size = 48 }) => (
+export const SuccessIcon: FC<SuccessIconProps> = ({ className = "text-success", size = 48 }) => (
   <svg
     width={size}
     height={size}

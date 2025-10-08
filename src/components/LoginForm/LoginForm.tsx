@@ -6,6 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { DEFAULT_LOGIN_FORM_VALUES } from "../../shared/constants/constants";
 import { getErrorMessage } from "../../shared/utils/errorUtils";
 import { FormField } from "../FormField/FormField";
+import { PasswordInput } from "../PasswordInput/PasswordInput";
 import { type LoginFormValues, LoginFormValuesSchema } from "./schemas";
 
 export const LoginForm = () => {
@@ -51,11 +52,10 @@ export const LoginForm = () => {
           />
         </FormField>
         <FormField label="Password" htmlFor="password" errorMessage={errors.password?.message}>
-          <input
+          <PasswordInput
             id="password"
-            type="password"
-            className={`form-control ${errors.password ? "is-invalid" : ""}`}
             placeholder="Type your password"
+            error={!!errors.password}
             {...register("password")}
           />
         </FormField>

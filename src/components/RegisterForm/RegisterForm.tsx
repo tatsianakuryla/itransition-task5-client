@@ -6,6 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { DEFAULT_REGISTRATION_FORM_VALUES } from "../../shared/constants/constants";
 import { getErrorMessage } from "../../shared/utils/errorUtils";
 import { FormField } from "../FormField/FormField";
+import { PasswordInput } from "../PasswordInput/PasswordInput";
 import { type RegistrationFormValues, RegistrationFormValuesSchema } from "./schemas";
 
 export const RegisterForm = () => {
@@ -59,13 +60,7 @@ export const RegisterForm = () => {
           />
         </FormField>
         <FormField label="Password" htmlFor="password" errorMessage={errors.password?.message}>
-          <input
-            id="password"
-            type="password"
-            className={`form-control ${errors.password ? "is-invalid" : ""}`}
-            placeholder="Password"
-            {...register("password")}
-          />
+          <PasswordInput id="password" placeholder="Password" error={!!errors.password} {...register("password")} />
         </FormField>
       </fieldset>
       <button type="submit" className="btn btn-primary w-100 py-2 fw-semibold" disabled={registerMutation.isPending}>
