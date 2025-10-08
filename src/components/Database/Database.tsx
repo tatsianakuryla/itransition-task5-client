@@ -28,6 +28,17 @@ export const Database = () => {
     }
   };
 
+  const getSortIcon = (column: SortColumn) => {
+    if (sortColumn === column) {
+      return sortDirection === "asc" ? (
+        <i className="bi bi-arrow-up ms-1"></i>
+      ) : (
+        <i className="bi bi-arrow-down ms-1"></i>
+      );
+    }
+    return <i className="bi bi-arrow-down-up ms-1 text-muted opacity-50"></i>;
+  };
+
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
       setSelectedIds(users.map((user) => user.id));
@@ -147,7 +158,7 @@ export const Database = () => {
           className="table table-striped table-hover table-sm table-bordered"
           style={{ transition: "opacity 0.2s", opacity: isFetching ? 0.5 : 1, minWidth: "100%" }}
         >
-          <thead className="table-dark">
+          <thead className="table-light">
             <tr>
               <th scope="col" className="text-center" style={{ width: "50px", minWidth: "50px" }}>
                 <input
@@ -168,7 +179,7 @@ export const Database = () => {
                 style={{ cursor: "pointer", userSelect: "none", minWidth: "120px" }}
                 onClick={() => handleSort("name")}
               >
-                Name {sortColumn === "name" && (sortDirection === "asc" ? "↑" : "↓")}
+                Name {getSortIcon("name")}
               </th>
               <th
                 scope="col"
@@ -176,7 +187,7 @@ export const Database = () => {
                 style={{ cursor: "pointer", userSelect: "none", minWidth: "180px" }}
                 onClick={() => handleSort("email")}
               >
-                Email {sortColumn === "email" && (sortDirection === "asc" ? "↑" : "↓")}
+                Email {getSortIcon("email")}
               </th>
               <th
                 scope="col"
@@ -184,7 +195,7 @@ export const Database = () => {
                 style={{ cursor: "pointer", userSelect: "none", minWidth: "100px" }}
                 onClick={() => handleSort("status")}
               >
-                Status {sortColumn === "status" && (sortDirection === "asc" ? "↑" : "↓")}
+                Status {getSortIcon("status")}
               </th>
               <th
                 scope="col"
@@ -192,7 +203,7 @@ export const Database = () => {
                 style={{ cursor: "pointer", userSelect: "none", minWidth: "150px" }}
                 onClick={() => handleSort("lastLoginTime")}
               >
-                Last Login {sortColumn === "lastLoginTime" && (sortDirection === "asc" ? "↑" : "↓")}
+                Last Login {getSortIcon("lastLoginTime")}
               </th>
               <th
                 scope="col"
@@ -200,7 +211,7 @@ export const Database = () => {
                 style={{ cursor: "pointer", userSelect: "none", minWidth: "150px" }}
                 onClick={() => handleSort("registrationTime")}
               >
-                Registration Date {sortColumn === "registrationTime" && (sortDirection === "asc" ? "↑" : "↓")}
+                Registration Date {getSortIcon("registrationTime")}
               </th>
             </tr>
           </thead>
