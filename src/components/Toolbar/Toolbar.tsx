@@ -7,29 +7,28 @@ interface ToolbarProps {
 }
 
 export const Toolbar = ({ selectedCount, onBlock, onUnblock, onDelete, onDeleteUnverified }: ToolbarProps) => {
+  const base =
+    "btn bg-secondary-subtle text-secondary rounded-2 px-3 py-2 " +
+    "border border-1 border-secondary focus-ring focus-ring-secondary";
+
+  const disabled = selectedCount === 0;
+
   return (
     <div className="d-flex gap-2 align-items-center mb-3">
-      <button className="btn btn-warning" onClick={onBlock} disabled={selectedCount === 0} title="Block selected users">
-        Block
+      <button className={base} onClick={onBlock} disabled={disabled} title="Block selected users">
+        <i className="bi bi-person-slash" />
       </button>
-      <button
-        className="btn btn-success"
-        onClick={onUnblock}
-        disabled={selectedCount === 0}
-        title="Unblock selected users"
-      >
-        <i className="bi bi-unlock-fill"></i>
+
+      <button className={base} onClick={onUnblock} disabled={disabled} title="Unblock selected users">
+        <i className="bi bi-unlock-fill" />
       </button>
-      <button
-        className="btn btn-danger"
-        onClick={onDelete}
-        disabled={selectedCount === 0}
-        title="Delete selected users"
-      >
-        <i className="bi bi-trash-fill"></i>
+
+      <button className={base} onClick={onDelete} disabled={disabled} title="Delete selected users">
+        <i className="bi bi-trash-fill" />
       </button>
-      <button className="btn btn-secondary" onClick={onDeleteUnverified} title="Delete all unverified users">
-        <i className="bi bi-eraser"></i>
+
+      <button className={base} onClick={onDeleteUnverified} title="Delete all unverified users">
+        <i className="bi bi-eraser" />
       </button>
     </div>
   );
